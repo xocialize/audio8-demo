@@ -5,11 +5,10 @@
 //  Code-only AppKit shell (no IB) hosting the SwiftUI interface, matching the house
 //  bootstrap in main.swift.
 //
-//  The template's Metal/DisplayLink startup (AppManager.initApp) is deliberately NOT
-//  called: this app renders no Metal surface of its own, and an idle DisplayLink would
-//  show up in the very timing and memory numbers the app exists to measure. AppManager
-//  stays in the target unused rather than being deleted, so the template stays intact
-//  for the next app copied from it.
+//  The house template's Metal/DisplayLink startup has been removed rather than left
+//  dormant: this app renders no Metal surface of its own, an idle DisplayLink would show
+//  up in the very timing and memory numbers the app exists to measure, and dead scaffolding
+//  in a reference app invites the reader to wonder what it is for.
 //
 
 import AppKit
