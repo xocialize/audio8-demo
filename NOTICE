@@ -1,0 +1,11 @@
+Audio8 Demo
+Copyright 2026 Xocialize
+
+This product includes reference audio from the Audio8-TTS SGLang Space
+(https://huggingface.co/spaces/Audio8/Audio8-TTS-Preview-0.6b-SGLang),
+licensed under the Apache License 2.0. The six clips in
+Audio8 Demo/Resources/Voices/ are reused unmodified.
+
+"Audio8" and the Audio8 logo are trademarks of their respective owners.
+Apache License 2.0 does not grant trademark rights (section 6), so no
+Audio8 branding is redistributed in this repository.
