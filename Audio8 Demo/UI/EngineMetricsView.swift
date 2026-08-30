@@ -8,6 +8,7 @@
 //  budget. Declared-vs-measured is therefore shown as a first-class row with a verdict.
 
 import DesignScaffold
+import DesignScaffoldMetrics
 import MLXAudio8TTS
 import MLXServeCore
 import MLXToolKit
@@ -53,28 +54,26 @@ struct EngineMetricsView: View {
     // MARK: Governor
 
     private var governorSection: some View {
-        Section(title: "Memory governor", systemImage: Tokens.Symbol.memory) {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: Tokens.Layout.metricTileMinWidth),
-                                         spacing: Tokens.Space.s)],
-                      spacing: Tokens.Space.s) {
-                MetricTile(value: snapshot.map { Double.formatBytes($0.budgetBytes) } ?? "—",
-                           label: "Budget", caption: "0.7 × device")
-                MetricTile(value: snapshot.map { Double.formatBytes($0.residentBytes) } ?? "—",
+        LabeledSection(title: "Memory governor", systemImage: Tokens.Symbol.memory) {
+            MetricGrid {
+                MetricTile(snapshot.map { Double.formatBytes($0.budgetBytes) } ?? "—",
+                           label: "Budget", caption: "0.7 × device").carded()
+                MetricTile(snapshot.map { Double.formatBytes($0.residentBytes) } ?? "—",
                            label: "Charged resident",
-                           caption: "declared, not measured")
-                MetricTile(value: snapshot.map { Double.formatBytes($0.transientReserveBytes) } ?? "—",
+                           caption: "declared, not measured").carded()
+                MetricTile(snapshot.map { Double.formatBytes($0.transientReserveBytes) } ?? "—",
                            label: "Transient reserve",
-                           caption: "max activation across residents")
-                MetricTile(value: snapshot.map { Double.formatBytes($0.availableBytes) } ?? "—",
+                           caption: "max activation across residents").carded()
+                MetricTile(snapshot.map { Double.formatBytes($0.availableBytes) } ?? "—",
                            label: "Available",
-                           caption: "budget − resident − reserve")
-                MetricTile(value: snapshot?.realResidentBytes.map { Double.formatBytes($0) } ?? "—",
-                           label: "Real phys", caption: "actual process footprint")
-                MetricTile(value: (snapshot?.underRealPressure ?? false) ? "YES" : "no",
+                           caption: "budget − resident − reserve").carded()
+                MetricTile(snapshot?.realResidentBytes.map { Double.formatBytes($0) } ?? "—",
+                           label: "Real phys", caption: "actual process footprint").carded()
+                MetricTile((snapshot?.underRealPressure ?? false) ? "YES" : "no",
                            label: "Under pressure",
+                           caption: "R-MEM-1 real-pressure",
                            emphasis: (snapshot?.underRealPressure ?? false)
-                               ? Tokens.Color.failure : Tokens.Color.label,
-                           caption: "R-MEM-1 real-pressure")
+                               ? Tokens.Color.failure : Tokens.Color.label).carded()
             }
         }
     }
@@ -82,7 +81,7 @@ struct EngineMetricsView: View {
     // MARK: GPU pool
 
     private var poolSection: some View {
-        Section(title: "GPU buffer pool", systemImage: Tokens.Symbol.engine) {
+        LabeledSection(title: "GPU buffer pool", systemImage: Tokens.Symbol.engine) {
             VStack(alignment: .leading, spacing: Tokens.Space.xs) {
                 LabeledContent("Active (live tensors)",
                                value: pool.map { Double.formatBytes($0.activeBytes) } ?? "—")
@@ -109,7 +108,7 @@ struct EngineMetricsView: View {
     // MARK: Declaration check
 
     private var declarationSection: some View {
-        Section(title: "Manifest declaration vs measured", systemImage: Tokens.Symbol.benchmark) {
+        LabeledSection(title: "Manifest declaration vs measured", systemImage: Tokens.Symbol.benchmark) {
             VStack(alignment: .leading, spacing: Tokens.Space.s) {
                 declarationRow(
                     label: "Resident floor",

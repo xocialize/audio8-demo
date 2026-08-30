@@ -7,6 +7,7 @@
 //  load shows "—", never 0.
 
 import DesignScaffold
+import DesignScaffoldMetrics
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -18,33 +19,31 @@ struct LiveMetricsPanel: View {
     private var last: RunRecord? { bench.records.last }
 
     var body: some View {
-        Section(title: "Measurements", systemImage: Tokens.Symbol.benchmark) {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: Tokens.Layout.metricTileMinWidth),
-                                         spacing: Tokens.Space.s)],
-                      spacing: Tokens.Space.s) {
-                MetricTile(value: last.map { String(format: "%.2f", $0.realTimeFactor) } ?? "—",
+        LabeledSection(title: "Measurements", systemImage: Tokens.Symbol.benchmark) {
+            MetricGrid {
+                MetricTile(last.map { String(format: "%.2f", $0.realTimeFactor) } ?? "—",
                            label: "Real-time factor",
-                           emphasis: rtfColor,
-                           caption: "< 1.0 is faster than realtime")
-                MetricTile(value: last.map { String(format: "%.2f", $0.runSeconds) } ?? "—",
-                           label: "Run", unit: "s")
-                MetricTile(value: last.map { String(format: "%.2f", $0.duration) } ?? "—",
-                           label: "Audio", unit: "s")
-                MetricTile(value: last.map { String($0.frames) } ?? "—",
+                           caption: "< 1.0 is faster than realtime",
+                           emphasis: rtfColor).carded()
+                MetricTile(last.map { String(format: "%.2f", $0.runSeconds) } ?? "—",
+                           label: "Run", unit: "s").carded()
+                MetricTile(last.map { String(format: "%.2f", $0.duration) } ?? "—",
+                           label: "Audio", unit: "s").carded()
+                MetricTile(last.map { String($0.frames) } ?? "—",
                            label: "Frames",
-                           caption: last.map { String(format: "%.1f fps", $0.framesPerSecond) })
-                MetricTile(value: bench.loadSeconds.map { String(format: "%.2f", $0) } ?? "—",
+                           caption: last.map { String(format: "%.1f fps", $0.framesPerSecond) }).carded()
+                MetricTile(bench.loadSeconds.map { String(format: "%.2f", $0) } ?? "—",
                            label: "Model load", unit: "s",
-                           caption: bench.loadSeconds == nil ? "already resident" : nil)
-                MetricTile(value: Double.formatBytes(bench.residentFloorBytes),
+                           caption: bench.loadSeconds == nil ? "already resident" : nil).carded()
+                MetricTile(Double.formatBytes(bench.residentFloorBytes),
                            label: "Resident floor",
-                           caption: "post-load, pre-run")
-                MetricTile(value: last.map { Double.formatBytes($0.transientBytes) } ?? "—",
+                           caption: "post-load, pre-run").carded()
+                MetricTile(last.map { Double.formatBytes($0.transientBytes) } ?? "—",
                            label: "Transient",
-                           caption: "peak − floor")
-                MetricTile(value: last.map { Double.formatBytes($0.memoryAfter.physFootprintBytes) } ?? "—",
+                           caption: "peak − floor").carded()
+                MetricTile(last.map { Double.formatBytes($0.memoryAfter.physFootprintBytes) } ?? "—",
                            label: "Process phys",
-                           caption: "MLX under-reads vs this")
+                           caption: "MLX under-reads vs this").carded()
             }
         }
     }
@@ -221,7 +220,7 @@ struct SweepView: View {
                     .foregroundStyle(Tokens.Color.secondaryLabel)
                     .fixedSize(horizontal: false, vertical: true)
 
-                Section(title: "Voices", systemImage: Tokens.Symbol.voice) {
+                LabeledSection(title: "Voices", systemImage: Tokens.Symbol.voice) {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: Tokens.Space.s)],
                               spacing: Tokens.Space.s) {
                         ForEach(VoiceCorpus.all) { voice in
@@ -238,7 +237,7 @@ struct SweepView: View {
                     }
                 }
 
-                Section(title: "Prompts", systemImage: Tokens.Symbol.generate) {
+                LabeledSection(title: "Prompts", systemImage: Tokens.Symbol.generate) {
                     VStack(alignment: .leading) {
                         ForEach(BenchmarkPrompt.suite) { prompt in
                             Toggle(isOn: Binding(

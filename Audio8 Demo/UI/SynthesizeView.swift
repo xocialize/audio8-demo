@@ -56,7 +56,7 @@ struct SynthesizeView: View {
     private var composer: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Tokens.Space.xl) {
-                Section(title: "Text", systemImage: Tokens.Symbol.generate) {
+                LabeledSection(title: "Text", systemImage: Tokens.Symbol.generate) {
                     VStack(alignment: .leading, spacing: Tokens.Space.xs) {
                         TextEditor(text: $text)
                             .font(Tokens.Font.body)
@@ -78,7 +78,7 @@ struct SynthesizeView: View {
                     }
                 }
 
-                Section(title: "Reference voice", systemImage: Tokens.Symbol.voice) {
+                LabeledSection(title: "Reference voice", systemImage: Tokens.Symbol.voice) {
                     VStack(alignment: .leading, spacing: Tokens.Space.m) {
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: Tokens.Space.s)],
                                   spacing: Tokens.Space.s) {
@@ -125,7 +125,7 @@ struct SynthesizeView: View {
                 }
 
                 if let record = bench.records.last {
-                    Section(title: "Last render", systemImage: Tokens.Symbol.metrics) {
+                    LabeledSection(title: "Last render", systemImage: Tokens.Symbol.metrics) {
                         VStack(alignment: .leading, spacing: Tokens.Space.s) {
                             LevelIndicator(rmsDBFS: record.rmsDBFS,
                                            peakDBFS: record.peakDBFS,
@@ -164,7 +164,7 @@ struct SynthesizeView: View {
             // `maxWidth: .infinity` + clipping keeps ONE over-wide child from widening the
             // column and pushing its siblings out of view, which is what happened here.
             VStack(alignment: .leading, spacing: Tokens.Space.xl) {
-                Section(title: "Sampling", systemImage: Tokens.Symbol.settings) {
+                LabeledSection(title: "Sampling", systemImage: Tokens.Symbol.settings) {
                     VStack(alignment: .leading, spacing: Tokens.Space.m) {
                         // A .segmented picker takes its IDEAL width and refuses to compress.
                         // With four descriptive labels that is ~400 pt, which forced this whole

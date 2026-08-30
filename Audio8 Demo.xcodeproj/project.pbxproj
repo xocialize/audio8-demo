@@ -18,6 +18,8 @@
 		239156F4301BB8C2000BD5B9 /* MLXServeCore in Frameworks */ = {isa = PBXBuildFile; productRef = 239156F3301BB8C2000BD5B9 /* MLXServeCore */; };
 		239156F6301BB8C2000BD5B9 /* MLXToolKit in Frameworks */ = {isa = PBXBuildFile; productRef = 239156F5301BB8C2000BD5B9 /* MLXToolKit */; };
 		23D50003301BD000000BD5B9 /* DesignScaffold in Frameworks */ = {isa = PBXBuildFile; productRef = 23D50002301BD000000BD5B9 /* DesignScaffold */; };
+		23D5A003301BD000000BD5B9 /* DesignScaffoldStatus in Frameworks */ = {isa = PBXBuildFile; productRef = 23D5A004301BD000000BD5B9 /* DesignScaffoldStatus */; };
+		23D5A001301BD000000BD5B9 /* DesignScaffoldMetrics in Frameworks */ = {isa = PBXBuildFile; productRef = 23D5A002301BD000000BD5B9 /* DesignScaffoldMetrics */; };
 		23D5E597301BCEBF008882A5 /* MLXAudio8TTS in Frameworks */ = {isa = PBXBuildFile; productRef = 23D5E596301BCEBF008882A5 /* MLXAudio8TTS */; };
 		23D5E59A301BCEE5008882A5 /* TTSOrchestratorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 23D5E599301BCEE5008882A5 /* TTSOrchestratorKit */; };
 /* End PBXBuildFile section */
@@ -40,6 +42,8 @@
 			files = (
 				239156E3301BB380000BD5B9 /* LoggingKit in Frameworks */,
 				23D50003301BD000000BD5B9 /* DesignScaffold in Frameworks */,
+				23D5A003301BD000000BD5B9 /* DesignScaffoldStatus in Frameworks */,
+				23D5A001301BD000000BD5B9 /* DesignScaffoldMetrics in Frameworks */,
 				239156E8301BB8C2000BD5B9 /* MLXEngineUI in Frameworks */,
 				239156F2301BB8C2000BD5B9 /* MLXServeConformanceNN in Frameworks */,
 				239156EE301BB8C2000BD5B9 /* MLXRetrievalKitContracts in Frameworks */,
@@ -92,6 +96,8 @@
 			packageProductDependencies = (
 				239156E2301BB380000BD5B9 /* LoggingKit */,
 				23D50002301BD000000BD5B9 /* DesignScaffold */,
+				23D5A004301BD000000BD5B9 /* DesignScaffoldStatus */,
+				23D5A002301BD000000BD5B9 /* DesignScaffoldMetrics */,
 				239156E5301BB8C2000BD5B9 /* MLXEngineTestKit */,
 				239156E7301BB8C2000BD5B9 /* MLXEngineUI */,
 				239156E9301BB8C2000BD5B9 /* MLXHubMetadata */,
@@ -475,6 +481,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 23D50001301BD000000BD5B9 /* XCRemoteSwiftPackageReference "DesignScaffold" */;
 			productName = DesignScaffold;
+		};
+		23D5A004301BD000000BD5B9 /* DesignScaffoldStatus */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 23D50001301BD000000BD5B9 /* XCRemoteSwiftPackageReference "DesignScaffold" */;
+			productName = DesignScaffoldStatus;
+		};
+		23D5A002301BD000000BD5B9 /* DesignScaffoldMetrics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 23D50001301BD000000BD5B9 /* XCRemoteSwiftPackageReference "DesignScaffold" */;
+			productName = DesignScaffoldMetrics;
 		};
 		23D5E596301BCEBF008882A5 /* MLXAudio8TTS */ = {
 			isa = XCSwiftPackageProductDependency;

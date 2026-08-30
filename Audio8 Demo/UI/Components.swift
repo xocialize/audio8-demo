@@ -1,55 +1,50 @@
 //  Components.swift
-//  Reusable presentation pieces. Every value comes from `Tokens` — see DesignTokens.swift
-//  for why nothing here hardcodes a color or size.
+//  What is left after DesignScaffold. Every value comes from `Tokens`; every shape that
+//  the fleet shares comes from the package. What remains here is Audio8's own vocabulary:
+//  a panel container, a level verdict, a parameter slider, and the engine-state mapping.
+//
+//  Deleted from this file when the components landed (AB-A-0034 follow-through):
+//    · `MetricTile`      → DesignScaffoldMetrics. The package's tile IS this one — Audio8's
+//                          copy was the donor of the four it was promoted from.
+//    · `EngineStatusPill` → still here, but as ~10 lines over DesignScaffoldStatus.StatusPill
+//                          rather than a hand-drawn capsule. The app keeps the LABEL and the
+//                          state mapping, which is app vocabulary; the pill is not.
+//    · `Section`         → `LabeledSection`, and its header is now `SectionHeader`.
 
 import DesignScaffold
+import DesignScaffoldMetrics
+import DesignScaffoldStatus
 import SwiftUI
 
-/// A single headline measurement. `emphasis` colors the value when the number itself
-/// carries a verdict (a silent render, a clipped peak).
-struct MetricTile: View {
-    let value: String
-    let label: String
-    var unit: String?
-    var emphasis: Color = Tokens.Color.label
-    var caption: String?
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: Tokens.Space.xs) {
-            HStack(alignment: .firstTextBaseline, spacing: 2) {
-                Text(value)
-                    .font(Tokens.Font.metricValue)
-                    .foregroundStyle(emphasis)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.6)
-                if let unit {
-                    Text(unit)
-                        .font(Tokens.Font.metricLabel)
-                        .foregroundStyle(Tokens.Color.secondaryLabel)
-                }
-            }
-            Text(label.uppercased())
-                .font(Tokens.Font.metricLabel)
-                .foregroundStyle(Tokens.Color.secondaryLabel)
-            if let caption {
-                Text(caption)
-                    .font(Tokens.Font.caption)
-                    .foregroundStyle(Tokens.Color.tertiaryLabel)
-                    .lineLimit(1)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(Tokens.Space.m)
-        .cardSurface()
-    }
-}
-
-/// Section wrapper: a titled group with consistent spacing.
-struct Section<Content: View>: View {
+/// A titled group: an icon, a title, and content beneath.
+///
+/// Renamed from `Section`, which shadowed `SwiftUI.Section` for every file in the target —
+/// a top-level type with that name means `Section { }` inside a `Form` or `List` silently
+/// resolves to this instead, and the failure looks like a layout bug rather than a name
+/// collision.
+///
+/// ## Why the header is themed rather than adopting the house style verbatim
+///
+/// `SectionHeader`'s default is the fleet's eyebrow: 11pt uppercase, `secondaryLabel`. This
+/// app's panels are settings-style groups with a leading SF Symbol, where an 11pt uppercase
+/// label sits badly next to a 13pt icon. So the *component* is adopted — which is what brings
+/// the tracking, the `.isHeader` accessibility trait, and future fixes — and the *look* is
+/// declared as a theme instead of being redrawn. Deleting `.theme(Self.header)` below is the
+/// entire change needed to fall back to the house style.
+///
+/// The leading icon is deliberately NOT in the package: a fleet sweep found no second app that
+/// wanted one, and one need is not a promotion (AB-D-0049).
+struct LabeledSection<Content: View>: View {
     let title: String
     var systemImage: String?
-    var trailing: AnyView?
     @ViewBuilder var content: Content
+
+    private static var header: SectionHeaderTheme {
+        SectionHeaderTheme(font: Tokens.Font.sectionTitle,
+                           color: Tokens.Color.label,
+                           tracking: 0,
+                           uppercases: false)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: Tokens.Space.s) {
@@ -58,11 +53,7 @@ struct Section<Content: View>: View {
                     Image(systemName: systemImage)
                         .foregroundStyle(Tokens.Color.secondaryLabel)
                 }
-                Text(title)
-                    .font(Tokens.Font.sectionTitle)
-                    .foregroundStyle(Tokens.Color.label)
-                Spacer()
-                if let trailing { trailing }
+                SectionHeader(title).theme(Self.header)
             }
             content
         }
@@ -70,32 +61,34 @@ struct Section<Content: View>: View {
 }
 
 /// Engine status pill — the app's single source of "what is the engine doing right now".
+///
+/// The pill itself is `DesignScaffoldStatus.StatusPill`. What stays here is what the package
+/// deliberately does not own: the LABEL, and the mapping from this app's seven-case engine
+/// state onto the four states a status pill reports.
 struct EngineStatusPill: View {
     let state: Audio8Bench.EngineState
 
-    private var tint: Color {
-        switch state {
-        case .ready: Tokens.Color.ready
-        case .failed: Tokens.Color.failure
-        case .idle: Tokens.Color.secondaryLabel
-        default: Tokens.Color.working
-        }
-    }
-
     var body: some View {
-        HStack(spacing: Tokens.Space.xs) {
-            Circle()
-                .fill(tint)
-                .frame(width: 7, height: 7)
-            Text(state.label)
-                .font(Tokens.Font.caption)
-                .foregroundStyle(Tokens.Color.secondaryLabel)
-                .lineLimit(1)
+        StatusPill(state.label, status: state.status)
+            // `.failed(why)` composes a sentence, and the sidebar is 260pt wide. The full
+            // text is already rendered beneath as `bench.lastError`.
+            .lineLimit(1)
+    }
+}
+
+extension Audio8Bench.EngineState {
+    /// What the pill reports.
+    ///
+    /// `needsFolder` and `needsDownload` map to `.working` rather than `.idle` on purpose:
+    /// both mean "something has to happen before this app can run", and amber says that
+    /// where grey would read as settled.
+    var status: Status {
+        switch self {
+        case .ready: .ready
+        case .failed: .failed
+        case .idle: .idle
+        case .registering, .needsFolder, .needsDownload, .preparing, .working: .working()
         }
-        .padding(.horizontal, Tokens.Space.s)
-        .padding(.vertical, Tokens.Space.xs)
-        .background(Tokens.Color.surfaceElevated, in: Capsule())
-        .overlay(Capsule().strokeBorder(Tokens.Color.separator, lineWidth: Tokens.Layout.hairline))
     }
 }
 
@@ -129,6 +122,10 @@ struct ParameterSlider: View {
 
 /// Level meter that states the verdict in words as well as color — a silent render is
 /// the failure this app exists to surface, so it should never be a subtle cue.
+///
+/// NOT `DesignScaffoldWaveform.AudioLevelMeter`, and the difference is real rather than
+/// stylistic: that one draws a live bar meter of a signal in flight, this one renders a
+/// settled verdict about a finished render. Substituting it would lose the word.
 struct LevelIndicator: View {
     let rmsDBFS: Double
     let peakDBFS: Double

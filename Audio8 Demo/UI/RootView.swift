@@ -116,7 +116,7 @@ struct RootView: View {
 
                 EngineSettingsView(storage: bench.storage)
 
-                Section(title: "Model", systemImage: Tokens.Symbol.engine) {
+                LabeledSection(title: "Model", systemImage: Tokens.Symbol.engine) {
                     VStack(alignment: .leading, spacing: Tokens.Space.xs) {
                         LabeledContent("Package", value: "Audio8-TTS-Preview-0.6b")
                         LabeledContent("Weights", value: "mlx-community/Audio8-TTS-Preview-0.6b-bf16")

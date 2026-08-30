@@ -32,7 +32,7 @@ struct LongFormView: View {
                     .foregroundStyle(Tokens.Color.secondaryLabel)
                     .fixedSize(horizontal: false, vertical: true)
 
-                Section(title: "Passage", systemImage: Tokens.Symbol.generate) {
+                LabeledSection(title: "Passage", systemImage: Tokens.Symbol.generate) {
                     VStack(alignment: .leading, spacing: Tokens.Space.xs) {
                         TextEditor(text: $text)
                             .font(Tokens.Font.body)
@@ -45,7 +45,7 @@ struct LongFormView: View {
                     }
                 }
 
-                Section(title: "Settings", systemImage: Tokens.Symbol.settings) {
+                LabeledSection(title: "Settings", systemImage: Tokens.Symbol.settings) {
                     VStack(alignment: .leading, spacing: Tokens.Space.m) {
                         Picker("Voice", selection: $selectedVoiceID) {
                             ForEach(VoiceCorpus.all) { v in
@@ -97,7 +97,7 @@ struct LongFormView: View {
     }
 
     private var comparison: some View {
-        Section(title: "Orchestrated vs one-shot", systemImage: Tokens.Symbol.metrics) {
+        LabeledSection(title: "Orchestrated vs one-shot", systemImage: Tokens.Symbol.metrics) {
             VStack(alignment: .leading, spacing: Tokens.Space.s) {
                 HStack(spacing: Tokens.Space.l) {
                     column(title: "Orchestrated",
