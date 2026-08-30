@@ -8,6 +8,7 @@
 //  and orchestrated, and compare peak transient and RTF side by side.
 
 import DesignScaffold
+import DesignScaffoldControls
 import SwiftUI
 
 struct LongFormView: View {
@@ -53,11 +54,10 @@ struct LongFormView: View {
                             }
                         }
                         .frame(maxWidth: 320)
-                        ParameterSlider(title: "Chunk target (seconds)",
-                                        value: $targetSeconds, range: 5...30, step: 1,
-                                        format: "%.0f",
-                                        help: "Caps every decode. Larger means fewer seams but a "
-                                            + "bigger activation peak per chunk.")
+                        LabeledSlider("Chunk target", value: $targetSeconds, in: 5...30,
+                                      decimals: 0, unit: " s")
+                            .help("Caps every decode. Larger means fewer seams but a "
+                                  + "bigger activation peak per chunk.")
                             .frame(maxWidth: 320)
                     }
                     .padding(Tokens.Space.m)

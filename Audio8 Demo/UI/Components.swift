@@ -10,8 +10,11 @@
 //                          rather than a hand-drawn capsule. The app keeps the LABEL and the
 //                          state mapping, which is app vocabulary; the pill is not.
 //    · `Section`         → `LabeledSection`, and its header is now `SectionHeader`.
+//    · `ParameterSlider` → DesignScaffoldControls.LabeledSlider. It was one of SEVEN on
+//                          the volume, and one of the two whose Int bridge truncated.
 
 import DesignScaffold
+import DesignScaffoldControls
 import DesignScaffoldMetrics
 import DesignScaffoldStatus
 import SwiftUI
@@ -89,34 +92,6 @@ extension Audio8Bench.EngineState {
         case .idle: .idle
         case .registering, .needsFolder, .needsDownload, .preparing, .working: .working()
         }
-    }
-}
-
-/// A labeled slider with a live numeric readout, clamped to the reference
-/// implementation's validated range.
-struct ParameterSlider: View {
-    let title: String
-    @Binding var value: Double
-    let range: ClosedRange<Double>
-    var step: Double = 0.01
-    var format: String = "%.2f"
-    var help: String?
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            HStack {
-                Text(title)
-                    .font(Tokens.Font.caption)
-                    .foregroundStyle(Tokens.Color.secondaryLabel)
-                Spacer()
-                Text(String(format: format, value))
-                    .font(Tokens.Font.metricInline)
-                    .foregroundStyle(Tokens.Color.label)
-            }
-            Slider(value: $value, in: range, step: step)
-                .controlSize(.small)
-        }
-        .help(help ?? "")
     }
 }
 

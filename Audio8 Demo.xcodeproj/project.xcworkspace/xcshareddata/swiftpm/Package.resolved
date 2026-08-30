@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/xocialize/DesignScaffold.git",
       "state" : {
-        "revision" : "7e32af8d311aa9067140f9763bd947c5cc0170b2",
-        "version" : "0.15.2"
+        "revision" : "706381386e2651be72f4157b1c24be4b11d61dde",
+        "version" : "0.16.0"
       }
     },
     {

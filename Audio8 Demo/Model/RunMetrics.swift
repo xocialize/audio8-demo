@@ -59,8 +59,11 @@ struct RunParameters: Codable, Hashable, Sendable {
     static let maxCharacters = 1000
 
     /// Slider-facing mirrors of the integer ranges (SwiftUI sliders are Double-valued).
-    static let topKSliderRange: ClosedRange<Double> = 1...200
-    static let maxFramesSliderRange: ClosedRange<Double> = 32...2048
+    // Int, matching the parameters they bound: `LabeledSlider` takes an `Int` binding
+    // directly, so nothing here has to convert. The Double versions existed only because
+    // the old hand-rolled slider could not.
+    static let topKSliderRange: ClosedRange<Int> = 1...200
+    static let maxFramesSliderRange: ClosedRange<Int> = 32...2048
 }
 
 /// How the reference voice was supplied.

@@ -9,6 +9,7 @@
 //  to answer with measurements.
 
 import DesignScaffold
+import DesignScaffoldControls
 import MLXToolKit
 import SwiftUI
 import UniformTypeIdentifiers
@@ -180,25 +181,19 @@ struct SynthesizeView: View {
                         .labelsHidden()
                         .frame(maxWidth: .infinity, alignment: .leading)
 
-                        ParameterSlider(title: "Temperature", value: $parameters.temperature,
-                                        range: RunParameters.temperatureRange,
-                                        help: "Higher is more varied. The Space defaults to 0.8; "
-                                            + "the model card to 0.7.")
-                        ParameterSlider(title: "Top P", value: $parameters.topP,
-                                        range: RunParameters.topPRange)
-                        ParameterSlider(title: "Top K",
-                                        value: Binding(
-                                            get: { Double(parameters.topK) },
-                                            set: { parameters.topK = Int($0) }),
-                                        range: RunParameters.topKSliderRange,
-                                        step: 1, format: "%.0f")
-                        ParameterSlider(title: "Max frames",
-                                        value: Binding(
-                                            get: { Double(parameters.maxFrames) },
-                                            set: { parameters.maxFrames = Int($0) }),
-                                        range: RunParameters.maxFramesSliderRange,
-                                        step: 32, format: "%.0f",
-                                        help: "One frame ≈ 46 ms of audio.")
+                        LabeledSlider("Temperature", value: $parameters.temperature,
+                                      in: RunParameters.temperatureRange)
+                            .help("Higher is more varied. The Space defaults to 0.8; "
+                                  + "the model card to 0.7.")
+                        LabeledSlider("Top P", value: $parameters.topP,
+                                      in: RunParameters.topPRange)
+                        // No hand-written Double bridge, and no `Int($0)` — the old wrapper
+                        // TRUNCATED, so the top of a drag lost a unit.
+                        LabeledSlider("Top K", value: $parameters.topK,
+                                      in: RunParameters.topKSliderRange)
+                        LabeledSlider("Max frames", value: $parameters.maxFrames,
+                                      in: RunParameters.maxFramesSliderRange, step: 32)
+                            .help("One frame ≈ 46 ms of audio.")
 
                         Toggle("Greedy (deterministic)", isOn: $parameters.greedy)
                             .font(Tokens.Font.caption)
