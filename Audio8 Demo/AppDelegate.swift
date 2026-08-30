@@ -12,6 +12,7 @@
 //
 
 import AppKit
+import DesignScaffold
 import SwiftUI
 
 @MainActor

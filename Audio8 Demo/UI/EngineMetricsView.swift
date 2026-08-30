@@ -7,6 +7,7 @@
 //  silently shrinks admissibility for every other model, and an over-declared one wastes
 //  budget. Declared-vs-measured is therefore shown as a first-class row with a verdict.
 
+import DesignScaffold
 import MLXAudio8TTS
 import MLXServeCore
 import MLXToolKit

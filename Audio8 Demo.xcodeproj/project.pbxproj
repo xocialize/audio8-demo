@@ -17,6 +17,7 @@
 		239156F2301BB8C2000BD5B9 /* MLXServeConformanceNN in Frameworks */ = {isa = PBXBuildFile; productRef = 239156F1301BB8C2000BD5B9 /* MLXServeConformanceNN */; };
 		239156F4301BB8C2000BD5B9 /* MLXServeCore in Frameworks */ = {isa = PBXBuildFile; productRef = 239156F3301BB8C2000BD5B9 /* MLXServeCore */; };
 		239156F6301BB8C2000BD5B9 /* MLXToolKit in Frameworks */ = {isa = PBXBuildFile; productRef = 239156F5301BB8C2000BD5B9 /* MLXToolKit */; };
+		23D50003301BD000000BD5B9 /* DesignScaffold in Frameworks */ = {isa = PBXBuildFile; productRef = 23D50002301BD000000BD5B9 /* DesignScaffold */; };
 		23D5E597301BCEBF008882A5 /* MLXAudio8TTS in Frameworks */ = {isa = PBXBuildFile; productRef = 23D5E596301BCEBF008882A5 /* MLXAudio8TTS */; };
 		23D5E59A301BCEE5008882A5 /* TTSOrchestratorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 23D5E599301BCEE5008882A5 /* TTSOrchestratorKit */; };
 /* End PBXBuildFile section */
@@ -38,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			files = (
 				239156E3301BB380000BD5B9 /* LoggingKit in Frameworks */,
+				23D50003301BD000000BD5B9 /* DesignScaffold in Frameworks */,
 				239156E8301BB8C2000BD5B9 /* MLXEngineUI in Frameworks */,
 				239156F2301BB8C2000BD5B9 /* MLXServeConformanceNN in Frameworks */,
 				239156EE301BB8C2000BD5B9 /* MLXRetrievalKitContracts in Frameworks */,
@@ -89,6 +91,7 @@
 			name = "Audio8 Demo";
 			packageProductDependencies = (
 				239156E2301BB380000BD5B9 /* LoggingKit */,
+				23D50002301BD000000BD5B9 /* DesignScaffold */,
 				239156E5301BB8C2000BD5B9 /* MLXEngineTestKit */,
 				239156E7301BB8C2000BD5B9 /* MLXEngineUI */,
 				239156E9301BB8C2000BD5B9 /* MLXHubMetadata */,
@@ -131,6 +134,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				239156E1301BB380000BD5B9 /* XCRemoteSwiftPackageReference "LoggingKit" */,
+				23D50001301BD000000BD5B9 /* XCRemoteSwiftPackageReference "DesignScaffold" */,
 				239156E4301BB8C2000BD5B9 /* XCRemoteSwiftPackageReference "mlx-engine-swift" */,
 				23D5E595301BCEBF008882A5 /* XCRemoteSwiftPackageReference "mlx-audio8-tts-swift" */,
 				23D5E598301BCEE5008882A5 /* XCRemoteSwiftPackageReference "tts-orchestrator-kit" */,
@@ -287,11 +291,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Audio8 Demo/Audio8 Demo.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
-				CODE_SIGN_ENTITLEMENTS = "Audio8 Demo/Audio8 Demo.entitlements";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
@@ -322,11 +326,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Audio8 Demo/Audio8 Demo.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
-				CODE_SIGN_ENTITLEMENTS = "Audio8 Demo/Audio8 Demo.entitlements";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
@@ -388,6 +392,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.40.1;
+			};
+		};
+		23D50001301BD000000BD5B9 /* XCRemoteSwiftPackageReference "DesignScaffold" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/xocialize/DesignScaffold.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.15.0;
 			};
 		};
 		23D5E595301BCEBF008882A5 /* XCRemoteSwiftPackageReference "mlx-audio8-tts-swift" */ = {
@@ -458,6 +470,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 239156E4301BB8C2000BD5B9 /* XCRemoteSwiftPackageReference "mlx-engine-swift" */;
 			productName = MLXToolKit;
+		};
+		23D50002301BD000000BD5B9 /* DesignScaffold */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 23D50001301BD000000BD5B9 /* XCRemoteSwiftPackageReference "DesignScaffold" */;
+			productName = DesignScaffold;
 		};
 		23D5E596301BCEBF008882A5 /* MLXAudio8TTS */ = {
 			isa = XCSwiftPackageProductDependency;

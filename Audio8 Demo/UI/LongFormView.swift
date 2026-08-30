@@ -7,6 +7,7 @@
 //  so this pane exists to MEASURE that rather than assert it: run the same passage one-shot
 //  and orchestrated, and compare peak transient and RTF side by side.
 
+import DesignScaffold
 import SwiftUI
 
 struct LongFormView: View {

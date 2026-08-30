@@ -5,6 +5,7 @@
 //  they already render download fraction → loading → ready, which is the difference
 //  between a real first-run affordance and a dead spinner.
 
+import DesignScaffold
 import MLXEngineUI
 import MLXServeCore
 import MLXToolKit

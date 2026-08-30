@@ -6,6 +6,7 @@
 //  large factor and picking one hides the disagreement. Likewise a run with no measured
 //  load shows "—", never 0.
 
+import DesignScaffold
 import SwiftUI
 import UniformTypeIdentifiers
 

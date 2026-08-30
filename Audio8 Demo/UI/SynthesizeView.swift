@@ -8,6 +8,7 @@
 //  preset — because "which defaults are actually better" is a question this app exists
 //  to answer with measurements.
 
+import DesignScaffold
 import MLXToolKit
 import SwiftUI
 import UniformTypeIdentifiers

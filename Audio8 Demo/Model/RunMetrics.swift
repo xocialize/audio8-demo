@@ -8,6 +8,7 @@
 //  measured on a given run is `nil`, never a plausible default — a fabricated number in
 //  a metrics table is worse than a blank, because it survives into comparisons.
 
+import DesignScaffold
 import Foundation
 
 /// Process + MLX memory readings around one run.
