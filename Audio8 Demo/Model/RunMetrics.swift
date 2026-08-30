@@ -82,6 +82,11 @@ struct RunRecord: Identifiable, Codable, Hashable, Sendable {
     let id: UUID
     let startedAt: Date
 
+    /// Which checkpoint produced this run. Recorded per record rather than held as app-wide
+    /// state so a history or an exported sweep stays meaningful across a model switch — a
+    /// table of RTFs that cannot say which model each row came from is not a comparison.
+    let checkpoint: Audio8Checkpoint
+
     // Inputs
     let voice: VoiceSource
     let promptLabel: String?

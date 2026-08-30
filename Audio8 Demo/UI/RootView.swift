@@ -74,6 +74,8 @@ struct RootView: View {
             Divider()
 
             VStack(alignment: .leading, spacing: Tokens.Space.s) {
+                CheckpointPicker(bench: bench)
+                Divider()
                 ModelStateView(monitor: bench.engine.preparation, capability: .tts)
                 EngineStatusPill(state: bench.engineState)
                 if let error = bench.lastError {
@@ -130,7 +132,8 @@ struct RootView: View {
                         Task { await bench.loadModel() }
                     } label: {
                         Label(bench.engineState == .needsDownload
-                              ? "Download & load (~2.6 GB)" : "Load model",
+                              ? "Download & load (\(bench.checkpoint.approximateDownloadDescription))"
+                              : "Load model",
                               systemImage: Tokens.Symbol.engine)
                     }
                     .disabled(bench.engineState == .ready || bench.engineState.isBusy
@@ -172,6 +175,50 @@ struct RootView: View {
                                                       : "Load the model")
             .disabled(bench.engineState == .ready || bench.engineState.isBusy
                       || bench.engineState == .needsFolder)
+        }
+    }
+}
+
+
+/// Which checkpoint the app is pointed at.
+///
+/// Sits directly above `ModelStateView` because it determines what that state is ABOUT —
+/// switching evicts one model and prepares the other, so the two belong together.
+///
+/// The subtitle is not decoration. Both checkpoints clone voices and the smaller one is
+/// newer, so "0.1B" reads as an upgrade unless the tradeoff is stated: it is the footprint
+/// option, and it clones less faithfully. The declared resident floor is shown for the same
+/// reason — the saving is much smaller than the parameter counts suggest, because both share
+/// the same 1.35 GB codec.
+struct CheckpointPicker: View {
+    @Bindable var bench: Audio8Bench
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Tokens.Space.xs) {
+            Text("Checkpoint")
+                .font(Tokens.Font.caption)
+                .foregroundStyle(Tokens.Color.secondaryLabel)
+
+            Picker("Checkpoint", selection: Binding(
+                get: { bench.checkpoint },
+                set: { next in Task { await bench.select(next) } }
+            )) {
+                ForEach(Audio8Checkpoint.allCases) { checkpoint in
+                    Text(checkpoint.shortName).tag(checkpoint)
+                }
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            .disabled(bench.engineState.isBusy)
+
+            Text(bench.checkpoint.subtitle)
+                .font(Tokens.Font.caption)
+                .foregroundStyle(Tokens.Color.secondaryLabel)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Text("declares \(ByteCountFormatter.string(fromByteCount: Int64(bench.checkpoint.declaredResidentBytes), countStyle: .memory)) resident")
+                .font(Tokens.Font.caption)
+                .foregroundStyle(Tokens.Color.tertiaryLabel)
         }
     }
 }

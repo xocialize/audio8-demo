@@ -42,7 +42,17 @@ final class Audio8Bench {
     /// machine-specific path — this app is meant to build and run for anyone.
     let storage = ModelStorageModel()
 
-    private(set) var packageID: PackageID?
+    /// Which checkpoint the app is currently pointed at. Both are registered; this decides
+    /// which one `prepare`/`run`/`evict` address.
+    private(set) var checkpoint: Audio8Checkpoint = .preview06b
+
+    /// One `PackageID` per checkpoint. The engine supports several packages behind one
+    /// capability, so both are registered up front and switching is a `prepare()` on the
+    /// other id — no re-registration, and the unselected one simply stays unloaded.
+    private(set) var packageIDs: [Audio8Checkpoint: PackageID] = [:]
+
+    /// The id every engine call in this file routes through.
+    var packageID: PackageID? { packageIDs[checkpoint] }
     /// What the CURRENT registration was bound to. BOTH are tracked deliberately: the
     /// user-visible path string AND the resolved security-scoped grant.
     ///
@@ -129,11 +139,16 @@ final class Audio8Bench {
         await engine.useModelStore(ModelStore(root: storage.resolvedModelsDirectory))
 
         do {
-            // Same id ⇒ replaces the previous registration rather than stacking one.
-            packageID = try await engine.register(
+            // Both checkpoints, every time. Same id ⇒ replaces the previous registration
+            // rather than stacking one, which is what makes a folder change re-registerable.
+            packageIDs[.preview06b] = try await engine.register(
                 PackageRegistration.of(Audio8Package.self),
                 configuration: Audio8Configuration(),
-                id: packageID)
+                id: packageIDs[.preview06b])
+            packageIDs[.preview01b] = try await engine.register(
+                PackageRegistration.of(Audio8MiniPackage.self),
+                configuration: Audio8MiniConfiguration(),
+                id: packageIDs[.preview01b])
         } catch {
             let message = String(describing: error)
             engineState = .failed(message)
@@ -148,7 +163,41 @@ final class Audio8Bench {
             return
         }
         if await engine.needsDownload(.tts, package: packageID) {
-            // ~2.6 GB. Gated on explicit consent rather than pulled silently on launch.
+            // Gated on explicit consent rather than pulled silently on launch. The size
+            // differs per checkpoint, so the prompt reads it from the selection.
+            engineState = .needsDownload
+            return
+        }
+        await loadModel()
+    }
+
+    /// Point the app at the other checkpoint.
+    ///
+    /// Evicts the outgoing one FIRST. Both are ~1.6–2.4 GB resident and the governor would
+    /// otherwise be asked to hold both for no reason — the user asked to switch, not to
+    /// compare side by side. Registration is untouched: both packages stay registered, so
+    /// this is a `prepare()` on the other id rather than a re-register.
+    ///
+    /// Re-enters the same first-run stops as `bootstrap()`, because the second checkpoint's
+    /// weights may not be on disk even when the first one's are — `needsDownload` is asked
+    /// per package, not once for the app.
+    func select(_ next: Audio8Checkpoint) async {
+        guard next != checkpoint, !engineState.isBusy else { return }
+        if let current = packageID { await engine.evict(package: current) }
+
+        checkpoint = next
+        lastError = nil
+        // Load-time metrics belong to the model that produced them; carrying the previous
+        // checkpoint's numbers across a switch would misattribute them.
+        loadSeconds = nil
+        pendingLoadSeconds = nil
+        residentFloorBytes = 0
+
+        guard storage.resolvedModelsDirectory != nil else {
+            engineState = .needsFolder
+            return
+        }
+        if await engine.needsDownload(.tts, package: packageID) {
             engineState = .needsDownload
             return
         }
@@ -163,7 +212,10 @@ final class Audio8Bench {
         let pathChanged = storage.appliedPath != boundStorePath
         let grantChanged = storage.resolvedModelsDirectory != boundStoreRoot
         guard pathChanged || grantChanged else { return }
-        if let packageID { await engine.evict(package: packageID) }
+        // Evict every registered package, not just the selected one: a folder change
+        // invalidates the store for both, and the unselected one may still be resident from
+        // before the switch.
+        for id in packageIDs.values { await engine.evict(package: id) }
         await bootstrap()
     }
 
@@ -277,6 +329,7 @@ final class Audio8Bench {
         let record = RunRecord(
             id: UUID(),
             startedAt: started,
+            checkpoint: checkpoint,
             voice: voice,
             promptLabel: promptLabel,
             text: text,

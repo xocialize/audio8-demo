@@ -394,8 +394,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/xocialize/mlx-audio8-tts-swift";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.0;
+				branch = "audio8-0.1b-falcon-h1";
+				kind = branch;
 			};
 		};
 		23D5E598301BCEE5008882A5 /* XCRemoteSwiftPackageReference "tts-orchestrator-kit" */ = {
