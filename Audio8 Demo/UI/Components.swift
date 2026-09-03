@@ -82,15 +82,18 @@ struct EngineStatusPill: View {
 extension Audio8Bench.EngineState {
     /// What the pill reports.
     ///
-    /// `needsFolder` and `needsDownload` map to `.working` rather than `.idle` on purpose:
-    /// both mean "something has to happen before this app can run", and amber says that
-    /// where grey would read as settled.
+    /// `needsFolder` and `needsDownload` are `.attention`: settled, amber, waiting on the
+    /// user, not usable until they act. Until DesignScaffold 0.23.0 they were mapped to
+    /// `.working()` — the only amber case that existed — which made a state that was
+    /// waiting on the USER pulse "hold on" at them indefinitely. This app's compromise was
+    /// one of the three needs that promoted the case (AB-A-0060).
     var status: Status {
         switch self {
         case .ready: .ready
         case .failed: .failed
         case .idle: .idle
-        case .registering, .needsFolder, .needsDownload, .preparing, .working: .working()
+        case .needsFolder, .needsDownload: .attention
+        case .registering, .preparing, .working: .working()
         }
     }
 }
