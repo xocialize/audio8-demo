@@ -33,7 +33,7 @@ enum Audio8Checkpoint: String, CaseIterable, Identifiable, Codable, Sendable {
 
     var displayName: String {
         switch self {
-        case .realistic06b: "Audio8-TTS-Realistic-0.6b"
+        case .realistic06b: "Audio8-TTS-Realistic-Air"
         case .preview06b: "Audio8-TTS-Preview-0.6b"
         case .preview01b: "Audio8-TTS-Preview-0.1b"
         }

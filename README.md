@@ -1,7 +1,7 @@
 # Audio8 Demo — a reference & metrics harness for MLXEngine
 
 A macOS app that drives the Audio8-TTS checkpoints — by default
-[Audio8-TTS-Realistic-0.6b](https://huggingface.co/Edge0/Audio8-TTS-Realistic-0.6b), with
+[Audio8-TTS-Realistic-Air](https://huggingface.co/Edge0/Audio8-TTS-Realistic-Air) (formerly Realistic-0.6b), with
 [Preview-0.6b](https://huggingface.co/Audio8/Audio8-TTS-Preview-0.6b) and Preview-0.1b one click away — on Apple Silicon through [MLXEngine](https://github.com/xocialize/mlx-engine-swift), and
 **measures every run**. The audio is the by-product; the measurements are the point.
 
