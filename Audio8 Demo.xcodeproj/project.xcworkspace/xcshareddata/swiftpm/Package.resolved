@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/xocialize/mlx-audio8-tts-swift",
       "state" : {
-        "revision" : "ad17987710fbaaed887820b0660c7ecb2258022e",
-        "version" : "0.3.0"
+        "revision" : "0097e7d3ccd584124da08951a6c921034efe7f17",
+        "version" : "0.4.0"
       }
     },
     {

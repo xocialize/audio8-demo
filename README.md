@@ -1,7 +1,8 @@
 # Audio8 Demo — a reference & metrics harness for MLXEngine
 
-A macOS app that drives [Audio8-TTS-Preview-0.6b](https://huggingface.co/Audio8/Audio8-TTS-Preview-0.6b)
-on Apple Silicon through [MLXEngine](https://github.com/xocialize/mlx-engine-swift), and
+A macOS app that drives the Audio8-TTS checkpoints — by default
+[Audio8-TTS-Realistic-0.6b](https://huggingface.co/Edge0/Audio8-TTS-Realistic-0.6b), with
+[Preview-0.6b](https://huggingface.co/Audio8/Audio8-TTS-Preview-0.6b) and Preview-0.1b one click away — on Apple Silicon through [MLXEngine](https://github.com/xocialize/mlx-engine-swift), and
 **measures every run**. The audio is the by-product; the measurements are the point.
 
 It exists as a worked example of the consumer side of MLXEngine — model store, registration,
@@ -49,7 +50,8 @@ Every number here was added because something was wrong and nobody could see it:
 2. Build and run.
 3. **Settings → choose a models folder.** The app is sandboxed, so it needs an explicit grant;
    pointing several apps at one folder is what stops each of them downloading its own copy.
-4. **Download & load** (~2.6 GB, from `mlx-community/Audio8-TTS-Preview-0.6b-bf16`).
+4. **Download & load** (~2.6 GB, from `mlx-community/Audio8-TTS-Realistic-0.6b-bf16`). Switching
+   checkpoint downloads that one's weights the first time you pick it.
 5. Synthesize, or run the Sweep for a baseline.
 
 The download is gated behind explicit consent rather than starting on launch.

@@ -19,10 +19,12 @@ struct EngineMetricsView: View {
     @State private var snapshot: MemorySnapshot?
     @State private var pool: GPUPoolSnapshot?
 
-    /// What the package manifest declares for the bf16 variant.
-    private var declaredResident: UInt64 { Audio8Package.manifest.requirements.footprints
+    /// What the SELECTED checkpoint's manifest declares for the bf16 variant. (This read
+    /// `Audio8Package` unconditionally, so the 0.1b's readings were compared against the
+    /// 0.6b's declaration.)
+    private var declaredResident: UInt64 { bench.checkpoint.manifest.requirements.footprints
         .first { $0.quant == .bf16 }?.residentBytes ?? 0 }
-    private var declaredActivation: UInt64 { Audio8Package.manifest.requirements.footprints
+    private var declaredActivation: UInt64 { bench.checkpoint.manifest.requirements.footprints
         .first { $0.quant == .bf16 }?.peakActivationBytes ?? 0 }
 
     /// The worst transient observed this session — the number the manifest should reflect.

@@ -42,9 +42,9 @@ final class Audio8Bench {
     /// machine-specific path — this app is meant to build and run for anyone.
     let storage = ModelStorageModel()
 
-    /// Which checkpoint the app is currently pointed at. Both are registered; this decides
+    /// Which checkpoint the app is currently pointed at. All are registered; this decides
     /// which one `prepare`/`run`/`evict` address.
-    private(set) var checkpoint: Audio8Checkpoint = .preview06b
+    private(set) var checkpoint: Audio8Checkpoint = .realistic06b
 
     /// One `PackageID` per checkpoint. The engine supports several packages behind one
     /// capability, so both are registered up front and switching is a `prepare()` on the
@@ -139,8 +139,12 @@ final class Audio8Bench {
         await engine.useModelStore(ModelStore(root: storage.resolvedModelsDirectory))
 
         do {
-            // Both checkpoints, every time. Same id ⇒ replaces the previous registration
+            // Every checkpoint, every time. Same id ⇒ replaces the previous registration
             // rather than stacking one, which is what makes a folder change re-registerable.
+            packageIDs[.realistic06b] = try await engine.register(
+                PackageRegistration.of(Audio8RealisticPackage.self),
+                configuration: Audio8RealisticConfiguration(),
+                id: packageIDs[.realistic06b])
             packageIDs[.preview06b] = try await engine.register(
                 PackageRegistration.of(Audio8Package.self),
                 configuration: Audio8Configuration(),
